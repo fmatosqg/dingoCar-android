@@ -1,7 +1,8 @@
-package com.dingocar
+package com.dingocar.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.dingocar.R
 
 class MainActivity : AppCompatActivity() {
 
