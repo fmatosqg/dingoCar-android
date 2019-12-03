@@ -1,3 +1,7 @@
+! Related repositories
+- training: https://github.com/tall-josh/dingocar
+- ios: ?
+
 ! Setup
 
 !! On real phone

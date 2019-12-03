@@ -13,7 +13,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
  * @author Fabio de Matos
  * @since 03/12/2019.
  */
-class FragmentDriving(sensorRepository: ISensorRepository) : Fragment() {
+class FragmentDriving : Fragment() {
 
     private val viewModel: DrivingViewModel by viewModel()
 

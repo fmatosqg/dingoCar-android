@@ -3,6 +3,9 @@ package com.dingocar.ui
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.dingocar.domain.ISensorRepository
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.channels.consumeEach
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -10,8 +13,10 @@ import kotlinx.coroutines.launch
  * @author Fabio de Matos
  * @since 03/12/2019.
  */
-class DrivingViewModel : ViewModel() {
+@UseExperimental(ExperimentalCoroutinesApi::class)
+class DrivingViewModel(private val sensorRepository: ISensorRepository) : ViewModel() {
 
+    private val format = "%s = %+2.2f"
     val tiltX = MutableLiveData<String>()
     val tiltY = MutableLiveData<String>()
 
@@ -23,13 +28,20 @@ class DrivingViewModel : ViewModel() {
 
         viewModelScope
             .launch {
-                while (true) {
 
-                    delay(1_000)
+                sensorRepository.getTilt()
+                    .consumeEach {
 
-                    tiltX.postValue(1.0f.toString())
-                    tiltY.postValue(1.0f.toString())
-                }
+                        tiltX.postValue(
+                            format.format("x", it.x)
+                        )
+
+                        tiltY.postValue(
+                            format.format("y", it.y)
+                        )
+
+                        delay(500)
+                    }
             }
     }
 

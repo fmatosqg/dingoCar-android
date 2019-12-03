@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -10,19 +11,27 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="20dp">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@{viewModel.tiltX}" />
+            android:fontFamily="serif-monospace"
+            android:text="@{viewModel.tiltX}"
+            android:textSize="40dp"
+            tools:text="X" />
 
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@{viewModel.tiltY }" />
+            android:fontFamily="serif-monospace"
+            android:text="@{viewModel.tiltY }"
+            android:textSize="40dp"
+            tools:text="Y" />
     </LinearLayout>
 
 </layout>

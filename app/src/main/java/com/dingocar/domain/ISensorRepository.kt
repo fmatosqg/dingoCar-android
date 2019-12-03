@@ -1,5 +1,8 @@
 package com.dingocar.domain
 
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.Flow
+
 /**
  * @author Fabio de Matos
  * @since 03/12/2019.
@@ -12,7 +15,7 @@ interface ISensorRepository {
      *
      * @return Pair<X tilt, Y tilt>
      */
-    fun getTilt(): Pair<Float, Float>
+    fun getTilt(): Channel<SensorModel>
 
     /**
      * Sets how sensitive it is. The lower the number the more you have to rotate the phone
