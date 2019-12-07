@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
@@ -9,29 +10,69 @@
             type="com.dingocar.ui.DrivingViewModel" />
     </data>
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="vertical"
+        android:layout_height="match_parent"
         android:padding="20dp">
 
         <TextView
+            android:id="@+id/navigateTxtX"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="serif-monospace"
             android:text="@{viewModel.tiltX}"
-            android:textSize="40dp"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toTopOf="@id/navigateTxtY"
+            app:layout_constraintStart_toStartOf="parent"
             tools:text="X" />
 
 
         <TextView
+            android:id="@+id/navigateTxtY"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="serif-monospace"
             android:text="@{viewModel.tiltY }"
-            android:textSize="40dp"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toTopOf="@id/navigateSwitchSteer"
+            app:layout_constraintStart_toStartOf="@id/navigateTxtX"
             tools:text="Y" />
-    </LinearLayout>
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/navigateSwitchSteer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Steer"
+            app:layout_constraintBottom_toBottomOf="@id/navigateBarThrottleWrapper"
+            app:layout_constraintStart_toStartOf="parent" />
+
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/navigateSwitchThrottle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Throttle"
+            app:layout_constraintBottom_toBottomOf="@id/navigateBarThrottleWrapper"
+            app:layout_constraintEnd_toStartOf="@id/navigateBarThrottleWrapper" />
+
+
+        <com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper
+            android:id="@+id/navigateBarThrottleWrapper"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBar
+                android:id="@+id/navigateBarThrottle"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:splitTrack="false"
+                app:seekBarRotation="CW270" /> <!-- Rotation: CW90 or CW270 -->
+        </com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

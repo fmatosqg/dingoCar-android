@@ -12,7 +12,14 @@ import kotlinx.coroutines.launch
 
 class SensorRepositoryImpl(private val applicationContext: Context) : ISensorRepository {
 
+    private var sensitivity: Float = 2f
+
     private var channel = buildNewChannel()
+
+
+    init {
+        setSensitivity(1f)
+    }
 
     private fun buildNewChannel(): Channel<SensorModel> {
 
@@ -52,7 +59,7 @@ class SensorRepositoryImpl(private val applicationContext: Context) : ISensorRep
         CoroutineScope(Dispatchers.IO)
             .launch {
                 event
-                    ?.let { SensorModel(it.values[0], it.values[1]) }
+                    ?.let { SensorModel(it.values[1] * sensitivity, it.values[0] * sensitivity) }
                     ?.let {
                         if (!channel.isClosedForSend) {
                             channel.send(it)
@@ -63,6 +70,10 @@ class SensorRepositoryImpl(private val applicationContext: Context) : ISensorRep
     }
 
     override fun setSensitivity(sensitivity: Float) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+
+        if (sensitivity > 0 && sensitivity <= 1) {
+            this.sensitivity = sensitivity * 2f // because hw input only goes between -0.5 and 0.5
+        }
     }
+
 }

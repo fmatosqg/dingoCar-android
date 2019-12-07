@@ -16,6 +16,14 @@ import kotlinx.coroutines.launch
 @UseExperimental(ExperimentalCoroutinesApi::class)
 class DrivingViewModel(private val sensorRepository: ISensorRepository) : ViewModel() {
 
+
+    val mutableSwitchThrottle = MutableLiveData<Boolean>()
+    val mutableThrottleValue = MutableLiveData<Int>() // from 0 to 100
+
+
+    val mutableSwitchSteer = MutableLiveData<Boolean>()
+
+
     private val format = "%s = %+2.2f"
     val tiltX = MutableLiveData<String>()
     val tiltY = MutableLiveData<String>()
@@ -32,13 +40,21 @@ class DrivingViewModel(private val sensorRepository: ISensorRepository) : ViewMo
                 sensorRepository.getTilt()
                     .consumeEach {
 
-                        tiltX.postValue(
-                            format.format("x", it.x)
-                        )
+                        if (mutableSwitchSteer.value == false) {
+                            tiltX.postValue(
+                                format.format("x", it.x)
+                            )
+                        } else {
+                            tiltX.postValue("auto steer")
+                        }
 
-                        tiltY.postValue(
-                            format.format("y", it.y)
-                        )
+                        if (mutableSwitchThrottle.value == false) {
+                            tiltY.postValue(
+                                format.format("y", it.y)
+                            )
+                        } else {
+                            tiltY.postValue("fixed throttle %+2d".format(mutableThrottleValue.value))
+                        }
 
                         delay(500)
                     }
