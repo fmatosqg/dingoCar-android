@@ -1,7 +1,6 @@
 package com.dingocar.domain
 
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.Flow
 
 /**
  * @author Fabio de Matos
