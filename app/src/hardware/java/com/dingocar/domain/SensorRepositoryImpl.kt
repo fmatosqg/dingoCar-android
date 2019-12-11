@@ -16,6 +16,12 @@ class SensorRepositoryImpl(private val applicationContext: Context) : ISensorRep
 
     private var channel = buildNewChannel()
 
+    companion object {
+        //The accelerometer's sensor data has a delta against earth's gravity - 9.80m/s. So
+        //to normalise the readings, this is a multiplication factor of 1/9.80
+        const val NORMALISATION_FACTOR = 0.102
+    }
+
 
     init {
         setSensitivity(1f)
@@ -36,10 +42,26 @@ class SensorRepositoryImpl(private val applicationContext: Context) : ISensorRep
             applicationContext.getSystemService(Context.SENSOR_SERVICE) as SensorManager
         val sensor: Sensor? = sensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR)
 
+        val accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
+
+        val accelerometerListener = object: SensorEventListener {
+            override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
+                //ToDo handle calbiration
+            }
+
+            override fun onSensorChanged(event: SensorEvent?) {
+                if (event?.sensor?.type == Sensor.TYPE_ACCELEROMETER ?: false) {
+                    //event!!.values[1] * NORMALISATION_FACTOR
+                }
+            }
+
+        }
+
+        sensorManager.registerListener(accelerometerListener, accelerometer, SensorManager.SENSOR_DELAY_UI)
 
         sensorManager.registerListener(object : SensorEventListener {
             override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
-
+                //ToDo handle calbiration
             }
 
             override fun onSensorChanged(event: SensorEvent?) {
@@ -47,15 +69,12 @@ class SensorRepositoryImpl(private val applicationContext: Context) : ISensorRep
             }
 
 
-        }, sensor, 10000);
+        }, sensor, SensorManager.SENSOR_DELAY_UI);
 
         return channel
     }
 
-
     private fun sendEvent(channel: Channel<SensorModel>, event: SensorEvent?) {
-
-
         CoroutineScope(Dispatchers.IO)
             .launch {
                 event
@@ -66,11 +85,9 @@ class SensorRepositoryImpl(private val applicationContext: Context) : ISensorRep
                         }
                     }
             }
-
     }
 
     override fun setSensitivity(sensitivity: Float) {
-
         if (sensitivity > 0 && sensitivity <= 1) {
             this.sensitivity = sensitivity * 2f // because hw input only goes between -0.5 and 0.5
         }
